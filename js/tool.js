@@ -13,46 +13,54 @@ Tools.drawSprite = function (can, con, div, redraw) {
   const sfillStyle = scontext.fillStyle;
   const sclearRect = scontext.clearRect;
   // Tool members
-  this.active = false;
-  this.hover = false;
+  this.drawLock = false;
+  this.hoverLock = false;
+  this.hoverSelect = false;
   this.sprite = null;
 
   this.mousedown = (ev) => {
-    this.active = true;
-    this.sprite = new Sprite(ev._x, ev._y);
+    if (!this.hoverLock && !this.hoverSelect) {
+      this.drawLock = true;
+      this.sprite = new Sprite(ev._x, ev._y);
+    }
   };
 
   this.mousemove = (ev) => {
-    if (!this.active) {
-      if (!this.hover) {
-        this.hover = true;
+    if (!this.drawLock) {
+      if (!this.hoverLock) {
+        this.hoverLock = true;
+        let hoverFound = false;
         div.sprites.forEach((sprite) => {
           if (sprite.onHover(ev._x, ev._y, div.zoom)) {
+            hoverFound = true;
+            sprite.hover = true;
             sclearRect.apply(scontext, sprite.toList(div.zoom));
-            scontext.fillStyle =  "rgba(0,255,0,.2)"
+            scontext.fillStyle = div.styles.on;
             sfillRect.apply(scontext, sprite.toList(div.zoom));
           } else if (sprite.hover) {
             sprite.hover = false;
             sclearRect.apply(scontext, sprite.toList(div.zoom));
-            scontext.fillStyle =  "rgba(0,0,0,.6)"
+            scontext.fillStyle = div.styles.off;
             sfillRect.apply(scontext, sprite.toList(div.zoom));
           }
         });
-        this.hover = false;
+        this.hoverSelect = hoverFound;
+        this.hoverLock = false;
       }
       return;
     }  
     this.sprite.updateWH(ev._x, ev._y);
     iclearRect.apply(icontext, screen.toList());
-    icontext.fillStyle = "rgba(0,0,0,.2)";
+    icontext.fillStyle = div.styles.draw;
     ifillRect.apply(icontext, this.sprite.toList());
   };
 
   this.mouseup = (ev) => {
+    if (!this.drawLock) return;
     div.sprites.push(this.sprite.unzoom(div.zoom));
     iclearRect.apply(icontext, screen.toList());
-    scontext.fillStyle = "rgba(0,0,0,.6)";
+    scontext.fillStyle = div.styles.off;
     sfillRect.apply(scontext, this.sprite.toList(div.zoom));
-    this.active = false;
+    this.drawLock = false;
   };
 }

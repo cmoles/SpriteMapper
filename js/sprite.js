@@ -34,15 +34,10 @@ Sprite.prototype.toList = function (zoom = 1) {
 }
 
 Sprite.prototype.onHover = function (x, y, zoom = 1) {
-  if (x > this.x * zoom && 
-      y > this.y * zoom &&
-      x < this.x * zoom + this.w * zoom &&
-      y < this.y * zoom + this.h * zoom) {
-    // set hover...
-    this.hover = true;
-    return true;
-  }
-  return false;
+  return (x > this.x * zoom && 
+          y > this.y * zoom &&
+          x < this.x * zoom + this.w * zoom &&
+          y < this.y * zoom + this.h * zoom);
 }
 
 var SpriteSet = Array;

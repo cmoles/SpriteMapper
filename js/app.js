@@ -7,6 +7,9 @@ app.init = function() {
   app.div = {width:0, height:0, zoom: 3};
   app.div.appDiv = document.getElementById('SpriteViewerApp');
   app.div.sprites = new SpriteSet();
+  app.div.styles = {draw: "rgba(0,0,0,.2)",
+                    off: "rgba(0,0,0,.6)",
+                    on: "rgba(0,255,0,.2"};
   app.can = {};
   app.can.canvasBackground = document.getElementById('canvasBackground');
   app.can.canvasSprites = document.getElementById('canvasSprites');
