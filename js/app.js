@@ -102,7 +102,8 @@ app.redraw = function() {
   bcontext.drawImage(app.img, 0, 0, width / zoom, height / zoom,
                               0, 0, width, height);
   scontext.clearRect(0, 0, width, height);
-  sprites.forEach((item, index) => {
+  scontext.fillStyle = "rgba(0,0,0,.6)";
+  sprites.forEach((item) => {
     scontext.fillRect.apply(scontext, item.toList(zoom));
   });
 };
