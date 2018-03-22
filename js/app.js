@@ -6,6 +6,7 @@ app.init = function() {
   console.debug('Adding Elements...');
   app.div = {width:0, height:0};
   app.div.appDiv = document.getElementById('SpriteViewerApp');
+  app.div.sprites = new SpriteSet();
   app.can = {};
   app.can.canvasBackground = document.getElementById('canvasBackground');
   app.can.canvasSprites = document.getElementById('canvasSprites');
@@ -28,6 +29,25 @@ app.init = function() {
       app.updateDimensions();
     }
   };
+
+  console.debug('Initializing Sprite Tool...');
+  app.tool = new Tools['drawSprite'](app.can, app.con, app.div, app.redraw);
+
+  console.debug('Adding Tool Events...');
+  app.can.canvasInterface.addEventListener('mousemove', this.runTool, false);
+  app.can.canvasInterface.addEventListener('mousedown', this.runTool, false);
+  app.can.canvasInterface.addEventListener('mouseup', this.runTool, false);
+};
+
+app.runTool = function (ev) {
+  if (ev.offsetX || ev.offsetX == 0) { // Webkit
+    ev._x = ev.offsetX;
+    ev._y = ev.offsetY;
+  } else if (ev.layerX || ev.layerX == 0) { // Gecko
+    ev._x = ev.layerX;
+    ev._y = ev.layerY;
+  }
+  app.tool[ev.type](ev);
 };
 
 app.updateDimensions = function() {
@@ -54,8 +74,14 @@ app.updateDimensions = function() {
 app.redraw = function() {
   const width = app.div.width;
   const height = app.div.height;
+  const sprites = app.div.sprites;
   const bcontext = app.con.contextBackground;
+  const scontext = app.con.contextSprites;
 
   bcontext.drawImage(app.img, 0, 0, width, height, 
                               0, 0, width, height);
+  scontext.clearRect(0, 0, width, height);
+  sprites.forEach((item, index) => {
+    scontext.fillRect.apply(scontext, item.toList());
+  });
 };

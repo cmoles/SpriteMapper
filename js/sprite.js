@@ -15,6 +15,13 @@ Sprite.prototype.init = function (args) {
   return this;
 }
 
+Sprite.prototype.updateWH = function (x, y) {
+  this.w = x - this.x;
+  this.h = y - this.y;
+}
+
 Sprite.prototype.toList = function () {
   return [this.x, this.y, this.w, this.h];
 }
+
+var SpriteSet = Array;
