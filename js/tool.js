@@ -27,9 +27,9 @@ Tools.drawSprite = function (can, con, div, redraw) {
   };
 
   this.mouseup = (ev) => {
-    div.sprites.push(this.sprite);
+    div.sprites.push(this.sprite.unzoom(div.zoom));
     iclearRect.apply(icontext, screen.toList());
-    sfillRect.apply(scontext, this.sprite.toList());
+    sfillRect.apply(scontext, this.sprite.toList(div.zoom));
     this.active = false;
   };
 }

@@ -4,7 +4,7 @@ app.init = function() {
   console.debug('App Initializing...');
 
   console.debug('Adding Elements...');
-  app.div = {width:0, height:0};
+  app.div = {width:0, height:0, zoom: 3};
   app.div.appDiv = document.getElementById('SpriteViewerApp');
   app.div.sprites = new SpriteSet();
   app.can = {};
@@ -37,6 +37,9 @@ app.init = function() {
   app.can.canvasInterface.addEventListener('mousemove', this.runTool, false);
   app.can.canvasInterface.addEventListener('mousedown', this.runTool, false);
   app.can.canvasInterface.addEventListener('mouseup', this.runTool, false);
+
+  console.debug('Adding Zoom Events...');
+  document.onmousewheel = app.zoomTool;
 };
 
 app.runTool = function (ev) {
@@ -48,6 +51,23 @@ app.runTool = function (ev) {
     ev._y = ev.layerY;
   }
   app.tool[ev.type](ev);
+};
+
+app.zoomTool = function (ev) {
+  const pre_d = app.div.zoom;
+  var delta = 0;
+
+  if (event.wheelDelta) {
+    delta = event.wheelDelta / 60; // IE and Opera
+  } else if (event.detail) {
+    delta = -event.detail / 60; // W3C
+  }
+  app.div.zoom = app.div.zoom + (delta * .1);
+
+  if (app.div.zoom < 1) app.div.zoom = 1;
+  else if (app.div.zoom > 10) app.div.zoom = 10;
+
+  if (app.div.zoom !== pre_d) app.redraw();
 };
 
 app.updateDimensions = function() {
@@ -74,14 +94,15 @@ app.updateDimensions = function() {
 app.redraw = function() {
   const width = app.div.width;
   const height = app.div.height;
+  const zoom = app.div.zoom;
   const sprites = app.div.sprites;
   const bcontext = app.con.contextBackground;
   const scontext = app.con.contextSprites;
 
-  bcontext.drawImage(app.img, 0, 0, width, height, 
+  bcontext.drawImage(app.img, 0, 0, width / zoom, height / zoom,
                               0, 0, width, height);
   scontext.clearRect(0, 0, width, height);
   sprites.forEach((item, index) => {
-    scontext.fillRect.apply(scontext, item.toList());
+    scontext.fillRect.apply(scontext, item.toList(zoom));
   });
 };
