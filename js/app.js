@@ -7,9 +7,11 @@ app.init = function() {
   app.div = {width:0, height:0, zoom: 3};
   app.div.appDiv = document.getElementById('SpriteViewerApp');
   app.div.sprites = new SpriteSet();
+  app.div.activeSprite = null;
   app.div.styles = {draw: "rgba(0,0,0,.2)",
                     off: "rgba(0,0,0,.6)",
-                    on: "rgba(0,255,0,.2"};
+                    on: "rgba(0,255,0,.2",
+                    active: "rgba(255,0,0,.2"};
   app.can = {};
   app.can.canvasBackground = document.getElementById('canvasBackground');
   app.can.canvasSprites = document.getElementById('canvasSprites');
@@ -99,14 +101,20 @@ app.redraw = function() {
   const height = app.div.height;
   const zoom = app.div.zoom;
   const sprites = app.div.sprites;
+  const active = app.div.activeSprite;
   const bcontext = app.con.contextBackground;
   const scontext = app.con.contextSprites;
 
   bcontext.drawImage(app.img, 0, 0, width / zoom, height / zoom,
                               0, 0, width, height);
   scontext.clearRect(0, 0, width, height);
-  scontext.fillStyle = "rgba(0,0,0,.6)";
+  scontext.fillStyle = app.div.styles.off;
   sprites.forEach((item) => {
     scontext.fillRect.apply(scontext, item.toList(zoom));
   });
+  if (active !== null) {
+    scontext.clearRect.apply(scontext, active.toList(zoom));
+    scontext.fillStyle = app.div.styles.active;
+    scontext.fillRect.apply(scontext, active.toList(zoom));
+  }
 };
