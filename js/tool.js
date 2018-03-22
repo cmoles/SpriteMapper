@@ -13,7 +13,6 @@ Tools.drawSprite = function (can, con, div, redraw) {
   const sfillStyle = scontext.fillStyle;
   const sclearRect = scontext.clearRect;
   // Sprite styles
-  const styleDraw = div.styles.active;
   const styleOff = div.styles.off;
   const styleOn = div.styles.on;
   const styleActive = div.styles.active;
@@ -28,6 +27,11 @@ Tools.drawSprite = function (can, con, div, redraw) {
       if (this.hoverSelect === null) {
         this.drawLock = true;
         this.sprite = new Sprite(ev._x, ev._y);
+        if (div.activeSprite !== null) {
+          clearSprite(div.activeSprite);
+          drawSprite(div.activeSprite, styleOff);
+          div.activeSprite = null;
+        }
       } else if (div.activeSprite != this.hoverSelect) {
         if (div.activeSprite !== null) {
           clearSprite(div.activeSprite);
@@ -72,14 +76,16 @@ Tools.drawSprite = function (can, con, div, redraw) {
     }  
     this.sprite.updateWH(ev._x, ev._y);
     clearInterface();
-    drawInterface(this.sprite, styleOff);
+    drawInterface(this.sprite, styleActive);
+    this.activeSprite = this.sprite.copy().unzoom(div.zoom);
   };
 
   this.mouseup = (ev) => {
     if (!this.drawLock) return;
     div.sprites.push(this.sprite.unzoom(div.zoom));
     clearInterface();
-    drawSprite(this.sprite, styleOff);
+    drawSprite(this.sprite, styleActive);
+    div.activeSprite = this.sprite;
     this.drawLock = false;
   };
 

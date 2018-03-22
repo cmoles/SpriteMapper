@@ -8,9 +8,8 @@ app.init = function() {
   app.div.appDiv = document.getElementById('SpriteViewerApp');
   app.div.sprites = new SpriteSet();
   app.div.activeSprite = null;
-  app.div.styles = {draw: "rgba(0,0,0,.2)",
-                    off: "rgba(0,0,0,.6)",
-                    on: "rgba(0,255,0,.2",
+  app.div.styles = {off: "rgba(0,0,0,.6)",
+                    on: "rgba(0,0,0,.2",
                     active: "rgba(255,0,0,.2"};
   app.can = {};
   app.can.canvasBackground = document.getElementById('canvasBackground');

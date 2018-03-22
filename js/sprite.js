@@ -29,6 +29,10 @@ Sprite.prototype.unzoom = function(zoom = 1) {
   return this;
 }
 
+Sprite.prototype.copy = function() {
+  return new Sprite(this.x, this.y, this.w, this.h);
+}
+
 Sprite.prototype.toList = function (zoom = 1) {
   return [this.x * zoom, this.y * zoom, this.w * zoom, this.h * zoom];
 }
