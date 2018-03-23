@@ -1,6 +1,12 @@
 var Tools = {};
 
-Tools.drawSprite = function (can, con, div, redraw) {
+//Tools.drawSprite = function (can, con, div, redraw) {
+Tools.drawSprite = function (app) {
+  const can = app.can;
+  const con = app.con;
+  const wid = app.wid;
+  const div = app.div;
+  const redraw = app.redraw;
   const screen = new Sprite(0, 0, div.width, div.height);
   // Interface context
   const icontext = con.contextInterface;
@@ -31,6 +37,7 @@ Tools.drawSprite = function (can, con, div, redraw) {
           clearSprite(div.activeSprite);
           drawSprite(div.activeSprite, styleOff);
           div.activeSprite = null;
+          wid.coords.view(null);
         }
       } else if (div.activeSprite != this.hoverSelect) {
         if (div.activeSprite !== null) {
@@ -40,10 +47,12 @@ Tools.drawSprite = function (can, con, div, redraw) {
         div.activeSprite = this.hoverSelect;
         clearSprite(div.activeSprite);
         drawSprite(div.activeSprite, styleActive);
+        wid.coords.view(div.activeSprite);
       } else {
         clearSprite(div.activeSprite);
         drawSprite(div.activeSprite, styleOn);
         div.activeSprite = null;
+        wid.coords.view(null);
       }
     }
   };
@@ -77,7 +86,8 @@ Tools.drawSprite = function (can, con, div, redraw) {
     this.sprite.updateWH(ev._x, ev._y);
     clearInterface();
     drawInterface(this.sprite, styleActive);
-    this.activeSprite = this.sprite.copy().unzoom(div.zoom);
+    div.activeSprite = this.sprite.copy().unzoom(div.zoom);
+    wid.coords.view(div.activeSprite);
   };
 
   this.mouseup = (ev) => {
@@ -86,6 +96,7 @@ Tools.drawSprite = function (can, con, div, redraw) {
     clearInterface();
     drawSprite(this.sprite, styleActive);
     div.activeSprite = this.sprite;
+    wid.coords.view(div.activeSprite);
     this.drawLock = false;
   };
 

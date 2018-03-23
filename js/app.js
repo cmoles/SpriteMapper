@@ -20,6 +20,11 @@ app.init = function() {
   app.con.contextSprites = app.can.canvasSprites.getContext('2d');
   app.con.contextInterface = app.can.canvasInterface.getContext('2d');
 
+  console.debug('Initializing Coordinate Widget...');
+  app.wid = {};
+  app.wid.coords = new Widgets.coordWidget(app);
+  app.wid.coords.init();
+
   console.debug('Adding Sprite Map...');
   app.img = new Image();
   app.img.onload = app.redraw;
@@ -35,7 +40,8 @@ app.init = function() {
   };
 
   console.debug('Initializing Sprite Tool...');
-  app.tool = new Tools['drawSprite'](app.can, app.con, app.div, app.redraw);
+  //app.tool = new Tools['drawSprite'](app.can, app.con, app.div, app.redraw);
+  app.tool = new Tools['drawSprite'](app);
 
   console.debug('Adding Tool Events...');
   app.can.canvasInterface.addEventListener('mousemove', this.runTool, false);

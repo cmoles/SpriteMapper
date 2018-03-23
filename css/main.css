@@ -18,3 +18,14 @@
   top: 0;
   left: 0;
 }
+
+.widget {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.widget > input {
+  width: 50%;
+}
+
+

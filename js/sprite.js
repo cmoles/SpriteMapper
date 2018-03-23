@@ -16,6 +16,13 @@ Sprite.prototype.init = function (args) {
   return this;
 }
 
+Sprite.prototype.update = function (args) {
+  this.x = args[0] || 0;
+  this.y = args[1] || 0;
+  this.w = args[2] || 0;
+  this.h = args[3] || 0;
+}
+
 Sprite.prototype.updateWH = function (x, y) {
   this.w = x - this.x;
   this.h = y - this.y;
