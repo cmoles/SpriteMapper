@@ -29,10 +29,10 @@ Sprite.prototype.updateWH = function (x, y) {
 }
 
 Sprite.prototype.unzoom = function(zoom = 1) {
-  this.x /= zoom;
-  this.y /= zoom;
-  this.w /= zoom;
-  this.h /= zoom;
+  this.x = Math.round(this.x / zoom);
+  this.y = Math.round(this.y / zoom);
+  this.w = Math.round(this.w / zoom);
+  this.h = Math.round(this.h / zoom);
   return this;
 }
 
