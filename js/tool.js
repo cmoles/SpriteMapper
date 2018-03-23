@@ -92,6 +92,11 @@ Tools.drawSprite = function (app) {
 
   this.mouseup = (ev) => {
     if (!this.drawLock) return;
+    if (this.sprite.isZeroArea()) {
+      this.sprite = null;
+      div.activeSprite = null;
+      return;
+    }
     div.sprites.push(this.sprite.unzoom(div.zoom));
     clearInterface();
     drawSprite(this.sprite, styleActive);

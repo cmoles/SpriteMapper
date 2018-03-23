@@ -51,4 +51,8 @@ Sprite.prototype.onHover = function (x, y, zoom = 1) {
           y < this.y * zoom + this.h * zoom);
 }
 
+Sprite.prototype.isZeroArea = function () {
+  return this.w === 0 || this.h === 0;
+}
+
 var SpriteSet = Array;
