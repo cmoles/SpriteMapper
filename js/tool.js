@@ -98,7 +98,9 @@ Tools.drawSprite = function (app) {
   };
 
   this.mouseup = (ev) => {
-    if (!this.drawLock) return;
+    if (!this.drawLock) {
+      return;
+    }
     if (this.toolSprite.isZeroArea()) {
       this.toolSprite = null;
       div.activeSprite = null;
@@ -109,7 +111,9 @@ Tools.drawSprite = function (app) {
     drawSprite(this.toolSprite, styleActive);
     div.activeSprite = this.toolSprite;
     wid.coords.view(div.activeSprite);
+    this.toolSprite = null;
     this.drawLock = false;
+    return;
   };
 
   var clearInterface = () => {
