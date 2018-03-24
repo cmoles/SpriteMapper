@@ -91,10 +91,11 @@ Widgets.loadWidget = function (app) {
     if (div.sprites.length === 0) {
       return;
     }
-    const filename = fn.value;
+    const filename = fn.value || "sprite_list.txt";
     const type = "application/octet-stream";
     const blob = new Blob([div.sprites.toCSV()], {type: type});
     const url = window.URL.createObjectURL(blob);
+    fn.value = filename;
     fa.href = url;
     fa.download = filename;
     fa.click();
