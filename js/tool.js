@@ -104,6 +104,7 @@ Tools.drawSprite = function (app) {
     if (this.toolSprite.isZeroArea()) {
       this.toolSprite = null;
       div.activeSprite = null;
+      this.drawLock = false;
       return;
     }
     div.sprites.push(this.toolSprite.unzoom(div.zoom));
@@ -134,6 +135,7 @@ Tools.drawSprite = function (app) {
     }
 
     if (div.zoom !== pre_d) {
+      this.mousemove(ev);
       redraw();
     }
     return;
