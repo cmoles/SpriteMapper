@@ -55,4 +55,17 @@ Sprite.prototype.isZeroArea = function () {
   return this.w === 0 || this.h === 0;
 }
 
+Sprite.prototype.toCSV = function () {
+  return "" + this.x + ", " + this.y + ", " + this.w + ", " + this.h;
+}
+
 var SpriteSet = Array;
+
+SpriteSet.prototype.toCSV = function() {
+  if (this.length === 0) {
+    return "";
+  }
+  return this.reduce((csv, sprite) => {
+    return csv + sprite.toCSV() + "\n";
+  }, "").trimRight(1);
+}

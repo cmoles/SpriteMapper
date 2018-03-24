@@ -60,3 +60,28 @@ Widgets.coordWidget = function (app) {
     redraw();
   };
 };
+
+Widgets.loadWidget = function (app) {
+  const div = app.div;
+  const fa = document.getElementById('fa');
+  const fn = document.getElementById('fn');
+  const fd = document.getElementById('fd');
+
+  this.init = () => {
+    fd.onclick = this.downloadButton;
+  };
+
+  this.downloadButton = () => {
+    if (div.sprites.length === 0) {
+      return;
+    }
+    const filename = fn.value;
+    const type = "application/octet-stream";
+    const blob = new Blob([div.sprites.toCSV()], {type: type});
+    const url = window.URL.createObjectURL(blob);
+    fa.href = url;
+    fa.download = filename;
+    fa.click();
+    window.URL.revokeObjectURL(url);
+  };
+};

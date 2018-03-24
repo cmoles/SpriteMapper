@@ -18,14 +18,20 @@
   top: 0;
   left: 0;
 }
-
-.widget {
-  position: absolute;
+#widgetCoord {
+  position: fixed;
   top: 0;
   right: 0;
 }
-.widget > input {
-  width: 50%;
+#widgetFile {
+  position: fixed;
+  bottom: 0;
+  right: 0;
 }
-
+.widget {
+  width: 5em;
+}
+.widget > input {
+  width: 100%;
+}
 

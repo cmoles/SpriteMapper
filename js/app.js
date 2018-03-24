@@ -20,10 +20,12 @@ app.init = function() {
   app.con.contextSprites = app.can.canvasSprites.getContext('2d');
   app.con.contextInterface = app.can.canvasInterface.getContext('2d');
 
-  console.debug('Initializing Coordinate Widget...');
+  console.debug('Initializing Widgets...');
   app.wid = {};
   app.wid.coords = new Widgets.coordWidget(app);
   app.wid.coords.init();
+  app.wid.loads = new Widgets.loadWidget(app);
+  app.wid.loads.init();
 
   console.debug('Adding Sprite Map...');
   app.img = new Image();
