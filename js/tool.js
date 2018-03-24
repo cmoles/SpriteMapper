@@ -2,21 +2,17 @@ var Tools = {};
 
 //Tools.drawSprite = function (can, con, div, redraw) {
 Tools.drawSprite = function (app) {
-  const can = app.can;
   const con = app.con;
   const wid = app.wid;
   const div = app.div;
   const redraw = app.redraw;
-  const screen = new Sprite(0, 0, div.width, div.height);
   // Interface context
   const icontext = con.contextInterface;
   const ifillRect = icontext.fillRect;
-  const ifillStyle = icontext.fillStyle;
   const iclearRect = icontext.clearRect;
   // Sprite context
   const scontext = con.contextSprites;
   const sfillRect = scontext.fillRect;
-  const sfillStyle = scontext.fillStyle;
   const sclearRect = scontext.clearRect;
   // Sprite styles
   const styleOff = div.styles.off;
@@ -142,6 +138,7 @@ Tools.drawSprite = function (app) {
   };
 
   var clearInterface = () => {
+    const screen = new Sprite(0, 0, div.width, div.height);
     iclearRect.apply(icontext, screen.toList());
   }
 
