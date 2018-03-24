@@ -63,12 +63,15 @@ Widgets.coordWidget = function (app) {
 
 Widgets.loadWidget = function (app) {
   const div = app.div;
+  const redraw = app.redraw;
   const fa = document.getElementById('fa');
   const fn = document.getElementById('fn');
   const fd = document.getElementById('fd');
+  const fu = document.getElementById('fu');
 
   this.init = () => {
     fd.onclick = this.downloadButton;
+    fu.onchange = this.handleFileSelect;
   };
 
   this.downloadButton = () => {
@@ -83,5 +86,31 @@ Widgets.loadWidget = function (app) {
     fa.download = filename;
     fa.click();
     window.URL.revokeObjectURL(url);
+  };
+
+  this.handleFileSelect = () => {
+    const file = event.target.files[0];
+    const reader = new FileReader()
+    reader.onload = (ev) => {
+      const f = ev.target.result;
+      const lines = f.split(/\r\n|\n/);
+
+      if (lines.length === 0) {
+        return;
+      }
+
+      div.activeSprite = null;
+      div.sprites.length = 0;
+
+      lines.forEach((args) => {
+        const a = args.split(", ");
+        if (a.length !== 4) {
+          return;
+        }
+        div.sprites.push(new Sprite(a[0], a[1], a[2], a[3]));
+      });
+      redraw();
+    };
+    reader.readAsText(file);
   };
 };
