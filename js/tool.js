@@ -62,36 +62,39 @@ Tools.drawSprite = function (app) {
   };
 
   this.mousemove = (ev) => {
-    if (!this.drawLock) {
-      if (!this.hoverLock) {
-        this.hoverLock = true;
-        let hoverFound = null;
-        div.sprites.forEach((sprite) => {
-          if (sprite.onHover(ev._x, ev._y, div.zoom)) {
-            hoverFound = sprite;
-            sprite.hover = true;
-            if (sprite != div.activeSprite) {
-              clearSprite(sprite);
-              drawSprite(sprite, styleOn);
-            }
-          } else if (sprite.hover) {
-            if (sprite != div.activeSprite) {
-              sprite.hover = false;
-              clearSprite(sprite);
-              drawSprite(sprite, styleOff);
-            }
-          }
-        });
-        this.hoverSelect = hoverFound;
-        this.hoverLock = false;
+    if (this.drawLock) {
+      this.toolSprite.updateWH(ev._x, ev._y);
+      clearInterface();
+      drawInterface(this.toolSprite, styleActive);
+      div.activeSprite = this.toolSprite.copy().unzoom(div.zoom);
+      wid.coords.view(div.activeSprite);
+      return;
+    }
+    if (this.hoverLock) {
+      return;
+    }
+    this.hoverLock = true;
+    let hoverFound = null;
+    div.sprites.forEach((sprite) => {
+      if (sprite.onHover(ev._x, ev._y, div.zoom)) {
+        hoverFound = sprite;
+        sprite.hover = true;
+        if (sprite != div.activeSprite) {
+          clearSprite(sprite);
+          drawSprite(sprite, styleOn);
+        }
+        return;
+      }
+      if (sprite.hover && sprite != div.activeSprite) {
+        sprite.hover = false;
+        clearSprite(sprite);
+        drawSprite(sprite, styleOff);
       }
       return;
-    }  
-    this.toolSprite.updateWH(ev._x, ev._y);
-    clearInterface();
-    drawInterface(this.toolSprite, styleActive);
-    div.activeSprite = this.toolSprite.copy().unzoom(div.zoom);
-    wid.coords.view(div.activeSprite);
+    });
+    this.hoverSelect = hoverFound;
+    this.hoverLock = false;
+    return;
   };
 
   this.mouseup = (ev) => {
