@@ -25,14 +25,14 @@ Tools.drawSprite = function (app) {
   // Tool members
   this.drawLock = false;
   this.hoverLock = false;
-  this.sprite = null;
+  this.toolSprite = null;
   this.hoverSelect = null;
 
   this.mousedown = (ev) => {
     if (!this.hoverLock) {
       if (this.hoverSelect === null) {
         this.drawLock = true;
-        this.sprite = new Sprite(ev._x, ev._y);
+        this.toolSprite = new Sprite(ev._x, ev._y);
         if (div.activeSprite !== null) {
           clearSprite(div.activeSprite);
           drawSprite(div.activeSprite, styleOff);
@@ -83,24 +83,24 @@ Tools.drawSprite = function (app) {
       }
       return;
     }  
-    this.sprite.updateWH(ev._x, ev._y);
+    this.toolSprite.updateWH(ev._x, ev._y);
     clearInterface();
-    drawInterface(this.sprite, styleActive);
-    div.activeSprite = this.sprite.copy().unzoom(div.zoom);
+    drawInterface(this.toolSprite, styleActive);
+    div.activeSprite = this.toolSprite.copy().unzoom(div.zoom);
     wid.coords.view(div.activeSprite);
   };
 
   this.mouseup = (ev) => {
     if (!this.drawLock) return;
-    if (this.sprite.isZeroArea()) {
-      this.sprite = null;
+    if (this.toolSprite.isZeroArea()) {
+      this.toolSprite = null;
       div.activeSprite = null;
       return;
     }
-    div.sprites.push(this.sprite.unzoom(div.zoom));
+    div.sprites.push(this.toolSprite.unzoom(div.zoom));
     clearInterface();
-    drawSprite(this.sprite, styleActive);
-    div.activeSprite = this.sprite;
+    drawSprite(this.toolSprite, styleActive);
+    div.activeSprite = this.toolSprite;
     wid.coords.view(div.activeSprite);
     this.drawLock = false;
   };
