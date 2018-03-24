@@ -10,10 +10,12 @@ Widgets.coordWidget = function (app) {
   const cw = document.getElementById('cw');
   const cu = document.getElementById('cu');
   const cd = document.getElementById('cd');
+  const cc = document.getElementById('cc');
 
   this.init = () => {
     cu.onclick = this.updateButton;
     cd.onclick = this.deleteButton;
+    cc.onclick = this.clearButton;
   };
 
   this.view = (sprite) => {
@@ -55,6 +57,13 @@ Widgets.coordWidget = function (app) {
       }
     });
     scontext.clearRect.apply(scontext, div.activeSprite.toList());
+    div.activeSprite = null;
+    this.view(null);
+    redraw();
+  };
+
+  this.clearButton = () => {
+    div.sprites.length = 0;
     div.activeSprite = null;
     this.view(null);
     redraw();
