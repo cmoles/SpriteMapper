@@ -29,32 +29,36 @@ Tools.drawSprite = function (app) {
   this.hoverSelect = null;
 
   this.mousedown = (ev) => {
-    if (!this.hoverLock) {
-      if (this.hoverSelect === null) {
-        this.drawLock = true;
-        this.toolSprite = new Sprite(ev._x, ev._y);
-        if (div.activeSprite !== null) {
-          clearSprite(div.activeSprite);
-          drawSprite(div.activeSprite, styleOff);
-          div.activeSprite = null;
-          wid.coords.view(null);
-        }
-      } else if (div.activeSprite != this.hoverSelect) {
-        if (div.activeSprite !== null) {
-          clearSprite(div.activeSprite);
-          drawSprite(div.activeSprite, styleOff);
-        }
-        div.activeSprite = this.hoverSelect;
+    if (this.hoverLock || this.drawLock) {
+      return;
+    }
+    if (this.hoverSelect === null) {
+      this.drawLock = true;
+      this.toolSprite = new Sprite(ev._x, ev._y);
+      if (div.activeSprite !== null) {
         clearSprite(div.activeSprite);
-        drawSprite(div.activeSprite, styleActive);
-        wid.coords.view(div.activeSprite);
-      } else {
-        clearSprite(div.activeSprite);
-        drawSprite(div.activeSprite, styleOn);
+        drawSprite(div.activeSprite, styleOff);
         div.activeSprite = null;
         wid.coords.view(null);
       }
+      return;
     }
+    if (div.activeSprite != this.hoverSelect) {
+      if (div.activeSprite !== null) {
+        clearSprite(div.activeSprite);
+        drawSprite(div.activeSprite, styleOff);
+      }
+      div.activeSprite = this.hoverSelect;
+      clearSprite(div.activeSprite);
+      drawSprite(div.activeSprite, styleActive);
+      wid.coords.view(div.activeSprite);
+      return;
+    }
+    clearSprite(div.activeSprite);
+    drawSprite(div.activeSprite, styleOn);
+    div.activeSprite = null;
+    wid.coords.view(null);
+    return;
   };
 
   this.mousemove = (ev) => {
