@@ -116,6 +116,29 @@ Tools.drawSprite = function (app) {
     return;
   };
 
+  this.wheel = (ev) => {
+    const pre_d = div.zoom;
+    var delta = 0;
+
+    if (event.wheelDelta) {
+      delta = event.wheelDelta / 60; // IE and Opera
+    } else if (event.detail) {
+      delta = -event.detail / 60; // W3C
+    }
+    div.zoom = div.zoom + (delta * .1);
+
+    if (div.zoom < 1) {
+      div.zoom = 1;
+    } else if (div.zoom > 10) {
+      div.zoom = 10;
+    }
+
+    if (div.zoom !== pre_d) {
+      redraw();
+    }
+    return;
+  };
+
   var clearInterface = () => {
     iclearRect.apply(icontext, screen.toList());
   }

@@ -47,9 +47,7 @@ app.init = function() {
   app.can.canvasInterface.addEventListener('mousemove', this.runTool, false);
   app.can.canvasInterface.addEventListener('mousedown', this.runTool, false);
   app.can.canvasInterface.addEventListener('mouseup', this.runTool, false);
-
-  console.debug('Adding Zoom Events...');
-  document.onmousewheel = app.zoomTool;
+  app.can.canvasInterface.addEventListener('wheel', this.runTool, false);
 };
 
 app.runTool = function (ev) {
@@ -61,23 +59,6 @@ app.runTool = function (ev) {
     ev._y = ev.layerY;
   }
   app.tool[ev.type](ev);
-};
-
-app.zoomTool = function (ev) {
-  const pre_d = app.div.zoom;
-  var delta = 0;
-
-  if (event.wheelDelta) {
-    delta = event.wheelDelta / 60; // IE and Opera
-  } else if (event.detail) {
-    delta = -event.detail / 60; // W3C
-  }
-  app.div.zoom = app.div.zoom + (delta * .1);
-
-  if (app.div.zoom < 1) app.div.zoom = 1;
-  else if (app.div.zoom > 10) app.div.zoom = 10;
-
-  if (app.div.zoom !== pre_d) app.redraw();
 };
 
 app.updateDimensions = function() {
