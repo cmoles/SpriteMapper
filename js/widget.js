@@ -9,12 +9,13 @@ Widgets.coordWidget = function (app) {
   const ch = document.getElementById('ch');
   const cw = document.getElementById('cw');
   const cu = document.getElementById('cu');
+  const cd = document.getElementById('cd');
 
   this.init = () => {
-    //cu.addEventListener('onclick', this.update);
-    cu.onclick = this.update;
+    cu.onclick = this.updateButton;
+    cd.onclick = this.deleteButton;
   };
-  
+
   this.view = (sprite) => {
     if (sprite != null) {
       cx.value = sprite.x;
@@ -28,9 +29,11 @@ Widgets.coordWidget = function (app) {
       ch.value = "";
     }
   };
-  
-  this.update = () => {
-    if (div.activeSprite == null) return;
+
+  this.updateButton = () => {
+    if (div.activeSprite === null) {
+      return;
+    }
     var spriteUpdate = new Sprite(cx.value, cy.value, cw.value, ch.value);
     div.sprites.forEach((sprite) => {
       if (sprite == div.activeSprite) {
@@ -39,6 +42,21 @@ Widgets.coordWidget = function (app) {
     });
     scontext.clearRect.apply(scontext, div.activeSprite.toList());
     div.activeSprite.update(spriteUpdate.toList());
+    redraw();
+  };
+
+  this.deleteButton = () => {
+    if (div.activeSprite === null) {
+      return;
+    }
+    div.sprites.forEach((sprite, index, array) => {
+      if (sprite == div.activeSprite) {
+        array.splice(index, 1);
+      }
+    });
+    scontext.clearRect.apply(scontext, div.activeSprite.toList());
+    div.activeSprite = null;
+    this.view(null);
     redraw();
   };
 };
