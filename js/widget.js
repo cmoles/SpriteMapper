@@ -77,6 +77,10 @@ Widgets.loadWidget = function (app) {
   const fn = document.getElementById('fn');
   const fd = document.getElementById('fd');
   const fu = document.getElementById('fu');
+  const cx = document.getElementById('cx');
+  const cy = document.getElementById('cy');
+  const ch = document.getElementById('ch');
+  const cw = document.getElementById('cw');
 
   this.init = () => {
     fd.onclick = this.downloadButton;
@@ -100,6 +104,9 @@ Widgets.loadWidget = function (app) {
   this.handleFileSelect = () => {
     const file = event.target.files[0];
     const reader = new FileReader()
+    if (file === undefined) {
+      return;
+    }
     reader.onload = (ev) => {
       const f = ev.target.result;
       const lines = f.split(/\r\n|\n/);
@@ -110,6 +117,10 @@ Widgets.loadWidget = function (app) {
 
       div.activeSprite = null;
       div.sprites.length = 0;
+      cx.value = "";
+      cy.value = "";
+      cw.value = "";
+      ch.value = "";
 
       lines.forEach((args) => {
         const a = args.split(", ");
@@ -121,5 +132,6 @@ Widgets.loadWidget = function (app) {
       redraw();
     };
     reader.readAsText(file);
+    fu.value = null;
   };
 };
