@@ -33,6 +33,14 @@ Sprite.prototype.unzoom = function(zoom = 1) {
   this.y = Math.round(this.y / zoom);
   this.w = Math.round(this.w / zoom);
   this.h = Math.round(this.h / zoom);
+  if (this.w < 0) {
+    this.x += this.w;
+    this.w *= -1;
+  }
+  if (this.h < 0) {
+    this.y += this.h;
+    this.h *= -1;
+  }
   return this;
 }
 
