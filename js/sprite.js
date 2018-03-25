@@ -36,19 +36,29 @@ Sprite.prototype.unzoom = function(zoom = 1) {
   return this;
 }
 
+Sprite.prototype.shift = function(offx = 0, offy = 0, zoom = 1) {
+  this.x = this.x + Math.round(offx / zoom);
+  this.y = this.y + Math.round(offy / zoom);
+  return this;
+}
+
 Sprite.prototype.copy = function() {
   return new Sprite(this.x, this.y, this.w, this.h);
 }
 
-Sprite.prototype.toList = function (zoom = 1) {
-  return [this.x * zoom, this.y * zoom, this.w * zoom, this.h * zoom];
+Sprite.prototype.toList = function (offx = 0, offy = 0, zoom = 1) {
+  const x = this.x * zoom - offx;
+  const y = this.y * zoom - offy;
+  const w = this.w * zoom;
+  const h = this.h * zoom;
+  return [x, y, w, h];
 }
 
-Sprite.prototype.onHover = function (x, y, zoom = 1) {
-  return (x > this.x * zoom && 
-          y > this.y * zoom &&
-          x < this.x * zoom + this.w * zoom &&
-          y < this.y * zoom + this.h * zoom);
+Sprite.prototype.onHover = function (x, y, offx = 0, offy = 0, zoom = 1) {
+  return (x > this.x * zoom - offx && 
+          y > this.y * zoom - offy &&
+          x < this.x * zoom - offx + this.w * zoom &&
+          y < this.y * zoom - offy + this.h * zoom);
 }
 
 Sprite.prototype.isZeroArea = function () {

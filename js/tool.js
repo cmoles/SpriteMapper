@@ -21,11 +21,28 @@ Tools.drawSprite = function (app) {
   // Tool members
   this.drawLock = false;
   this.hoverLock = false;
+  this.shiftLock = false;
   this.toolSprite = null;
   this.hoverSelect = null;
+  this.shiftOrigin = null;
+
+  this.init = () => {
+    document.oncontextmenu = new Function("return false");
+  };
 
   this.mousedown = (ev) => {
     if (this.hoverLock || this.drawLock) {
+      return;
+    }
+    if (ev._right && !this.shiftLock) {
+      this.shiftLock = true;
+      this.shiftOrigin = {x: ev._x, y: ev._y};
+      return;
+    }
+    if (this.shiftLock) {
+      this.shiftOrigin = null;
+      this.shiftLock = false;
+      redraw();
       return;
     }
     if (this.hoverSelect === null) {
@@ -62,17 +79,25 @@ Tools.drawSprite = function (app) {
       this.toolSprite.updateWH(ev._x, ev._y);
       clearInterface();
       drawInterface(this.toolSprite, styleActive);
-      div.activeSprite = this.toolSprite.copy().unzoom(div.zoom);
+      div.activeSprite = this.toolSprite
+                             .copy().unzoom(div.zoom);
       wid.coords.view(div.activeSprite);
       return;
     }
     if (this.hoverLock) {
       return;
     }
+    if (this.shiftLock) {
+      div.offx -= Math.round(ev._x - this.shiftOrigin.x);
+      div.offy -= Math.round(ev._y - this.shiftOrigin.y);
+      this.shiftOrigin = {x: ev._x, y: ev._y};
+      redraw(false);
+      return;
+    }
     this.hoverLock = true;
     let hoverFound = null;
     div.sprites.forEach((sprite) => {
-      if (sprite.onHover(ev._x, ev._y, div.zoom)) {
+      if (sprite.onHover(ev._x, ev._y, div.offx, div.offy, div.zoom)) {
         hoverFound = sprite;
         sprite.hover = true;
         if (sprite != div.activeSprite) {
@@ -103,7 +128,8 @@ Tools.drawSprite = function (app) {
       this.drawLock = false;
       return;
     }
-    div.sprites.push(this.toolSprite.unzoom(div.zoom));
+    div.sprites.push(this.toolSprite.unzoom(div.zoom)
+                                    .shift(div.offx, div.offy, div.zoom));
     clearInterface();
     drawSprite(this.toolSprite, styleActive);
     div.activeSprite = this.toolSprite;
@@ -148,11 +174,11 @@ Tools.drawSprite = function (app) {
   }
 
   var clearSprite = (sprite) => {
-    sclearRect.apply(scontext, sprite.toList(div.zoom));
+    sclearRect.apply(scontext, sprite.toList(div.offx, div.offy, div.zoom));
   }
 
   var drawSprite = (sprite, style) => {
     scontext.fillStyle = style;
-    sfillRect.apply(scontext, sprite.toList(div.zoom));
+    sfillRect.apply(scontext, sprite.toList(div.offx, div.offy, div.zoom));
   }
 }

@@ -4,7 +4,7 @@ app.init = function() {
   console.debug('App Initializing...');
 
   console.debug('Adding Elements...');
-  app.div = {width:0, height:0, zoom: 3};
+  app.div = {width:0, height:0, offx: 0, offy: 0, zoom: 3};
   app.div.appDiv = document.getElementById('SpriteViewerApp');
   app.div.sprites = new SpriteSet();
   app.div.activeSprite = null;
@@ -42,8 +42,8 @@ app.init = function() {
   };
 
   console.debug('Initializing Sprite Tool...');
-  //app.tool = new Tools['drawSprite'](app.can, app.con, app.div, app.redraw);
   app.tool = new Tools['drawSprite'](app);
+  app.tool.init();
 
   console.debug('Adding Tool Events...');
   app.can.canvasInterface.addEventListener('mousemove', this.runTool, false);
@@ -59,6 +59,12 @@ app.runTool = function (ev) {
   } else if (ev.layerX || ev.layerX == 0) { // Gecko
     ev._x = ev.layerX;
     ev._y = ev.layerY;
+  }
+  if ((ev.type === 'mousedown' || ev.type === 'mouseup') && 
+      (ev.which === 3 || ev.button === 2)) {
+    ev._right = true;
+  } else {
+    ev._right = false;
   }
   app.tool[ev.type](ev);
 };
@@ -84,25 +90,34 @@ app.updateDimensions = function() {
   app.resizing = false;
 };
 
-app.redraw = function() {
+app.redraw = function(enableSprites = true) {
   const width = app.div.width;
   const height = app.div.height;
+  const offx = app.div.offx;
+  const offy = app.div.offy;
   const zoom = app.div.zoom;
+  const zoffx = offx / zoom;
+  const zoffy = offy / zoom;
+  const zoffw = width / zoom;
+  const zoffh = height / zoom;
   const sprites = app.div.sprites;
   const active = app.div.activeSprite;
   const bcontext = app.con.contextBackground;
   const scontext = app.con.contextSprites;
 
-  bcontext.drawImage(app.img, 0, 0, width / zoom, height / zoom,
-                              0, 0, width, height);
+  bcontext.clearRect(0, 0, width, height);
+  bcontext.drawImage(app.img, zoffx, zoffy, zoffw, zoffh, 0, 0, width, height);
   scontext.clearRect(0, 0, width, height);
+  if (!enableSprites) {
+    return;
+  }
   scontext.fillStyle = app.div.styles.off;
   sprites.forEach((item) => {
-    scontext.fillRect.apply(scontext, item.toList(zoom));
+    scontext.fillRect.apply(scontext, item.toList(offx, offy, zoom));
   });
   if (active !== null) {
-    scontext.clearRect.apply(scontext, active.toList(zoom));
+    scontext.clearRect.apply(scontext, active.toList(offx, offy, zoom));
     scontext.fillStyle = app.div.styles.active;
-    scontext.fillRect.apply(scontext, active.toList(zoom));
+    scontext.fillRect.apply(scontext, active.toList(offx, offy, zoom));
   }
 };
