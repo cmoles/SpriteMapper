@@ -8,9 +8,10 @@ app.init = function() {
   app.div.appDiv = document.getElementById('SpriteViewerApp');
   app.div.sprites = new SpriteSet();
   app.div.activeSprite = null;
-  app.div.styles = {off: "rgba(0,0,0,.6)",
+  app.div.styles = {off: "rgba(0,0,0,.4)",
                     on: "rgba(0,0,0,.2",
-                    active: "rgba(255,0,0,.2"};
+                    actOff: "rgba(255,0,0,.3",
+                    actOn: "rgba(255,0,0,.2"};
   app.can = {};
   app.can.canvasBackground = document.getElementById('canvasBackground');
   app.can.canvasSprites = document.getElementById('canvasSprites');
@@ -117,7 +118,9 @@ app.redraw = function(enableSprites = true) {
   });
   if (active !== null) {
     scontext.clearRect.apply(scontext, active.toList(offx, offy, zoom));
-    scontext.fillStyle = app.div.styles.active;
+    scontext.fillStyle = active.hover ? app.div.styles.actOn :
+                                        app.div.styles.actOff;
+    scontext.fillStyle = app.div.styles.actOff;
     scontext.fillRect.apply(scontext, active.toList(offx, offy, zoom));
   }
 };

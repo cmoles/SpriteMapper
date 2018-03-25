@@ -17,7 +17,8 @@ Tools.drawSprite = function (app) {
   // Sprite styles
   const styleOff = div.styles.off;
   const styleOn = div.styles.on;
-  const styleActive = div.styles.active;
+  const styleActOn = div.styles.actOn;
+  const styleActOff = div.styles.actOff;
   // Tool members
   this.drawLock = false;
   this.hoverLock = false;
@@ -63,7 +64,7 @@ Tools.drawSprite = function (app) {
       }
       div.activeSprite = this.hoverSelect;
       clearSprite(div.activeSprite);
-      drawSprite(div.activeSprite, styleActive);
+      drawSprite(div.activeSprite, styleActOn);
       wid.coords.view(div.activeSprite);
       return;
     }
@@ -78,7 +79,7 @@ Tools.drawSprite = function (app) {
     if (this.drawLock) {
       this.toolSprite.updateWH(ev._x, ev._y);
       clearInterface();
-      drawInterface(this.toolSprite, styleActive);
+      drawInterface(this.toolSprite, styleActOn);
       div.activeSprite = this.toolSprite
                              .copy().unzoom(div.zoom);
       wid.coords.view(div.activeSprite);
@@ -96,14 +97,17 @@ Tools.drawSprite = function (app) {
     }
     this.hoverLock = true;
     let hoverFound = null;
+    let hoverActive = false;
     div.sprites.forEach((sprite) => {
       if (sprite.onHover(ev._x, ev._y, div.offx, div.offy, div.zoom)) {
         hoverFound = sprite;
         sprite.hover = true;
-        if (sprite != div.activeSprite) {
-          clearSprite(sprite);
-          drawSprite(sprite, styleOn);
+        if (sprite == div.activeSprite) {
+          hoverActive = true;
+          return;
         }
+        clearSprite(sprite);
+        drawSprite(sprite, styleOn);
         return;
       }
       if (sprite.hover && sprite != div.activeSprite) {
@@ -113,6 +117,15 @@ Tools.drawSprite = function (app) {
       }
       return;
     });
+    if (div.activeSprite !== null) {
+      div.activeSprite.hover = hoverActive;
+      clearSprite(div.activeSprite);
+      if (hoverActive) {
+        drawSprite(div.activeSprite, styleActOn);
+      } else {
+        drawSprite(div.activeSprite, styleActOff);
+      }
+    }
     this.hoverSelect = hoverFound;
     this.hoverLock = false;
     return;
@@ -131,7 +144,7 @@ Tools.drawSprite = function (app) {
     div.sprites.push(this.toolSprite.unzoom(div.zoom)
                                     .shift(div.offx, div.offy, div.zoom));
     clearInterface();
-    drawSprite(this.toolSprite, styleActive);
+    drawSprite(this.toolSprite, styleActOn);
     div.activeSprite = this.toolSprite;
     wid.coords.view(div.activeSprite);
     this.toolSprite = null;
