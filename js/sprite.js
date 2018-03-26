@@ -55,10 +55,10 @@ Sprite.prototype.copy = function() {
 }
 
 Sprite.prototype.toList = function (offx = 0, offy = 0, zoom = 1) {
-  const x = this.x * zoom - offx;
-  const y = this.y * zoom - offy;
-  const w = this.w * zoom;
-  const h = this.h * zoom;
+  const x = Math.round(this.x * zoom) - offx;
+  const y = Math.round(this.y * zoom) - offy;
+  const w = Math.round(this.w * zoom);
+  const h = Math.round(this.h * zoom);
   return [x, y, w, h];
 }
 
