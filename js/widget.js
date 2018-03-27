@@ -74,6 +74,7 @@ Widgets.loadWidget = function (app) {
   const div = app.div;
   const redraw = app.redraw;
   const fa = document.getElementById('fa');
+  const fi = document.getElementById('fi');
   const fn = document.getElementById('fn');
   const fd = document.getElementById('fd');
   const fu = document.getElementById('fu');
@@ -83,8 +84,9 @@ Widgets.loadWidget = function (app) {
   const cw = document.getElementById('cw');
 
   this.init = () => {
+    fi.onchange = this.handleFileImgSelect;
     fd.onclick = this.downloadButton;
-    fu.onchange = this.handleFileSelect;
+    fu.onchange = this.handleFileMapSelect;
   };
 
   this.downloadButton = () => {
@@ -102,7 +104,26 @@ Widgets.loadWidget = function (app) {
     window.URL.revokeObjectURL(url);
   };
 
-  this.handleFileSelect = () => {
+  this.handleFileImgSelect = () => {
+    const file = event.target.files[0];
+    const reader = new FileReader()
+    if (file === undefined) {
+      return;
+    }
+    reader.onload = (ev) => {
+      const f = ev.target.result;
+      div.offx = 0;
+      div.offy = 0;
+      div.zoom = 3;
+      app.img = new Image();
+      app.img.onload = redraw;
+      app.img.src = f;
+    };
+    reader.readAsDataURL(file);
+    fi.value = null;
+  };
+
+  this.handleFileMapSelect = () => {
     const file = event.target.files[0];
     const reader = new FileReader()
     if (file === undefined) {
