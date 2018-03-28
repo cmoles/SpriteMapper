@@ -74,7 +74,7 @@ Sprite.prototype.isZeroArea = function () {
 }
 
 Sprite.prototype.toCSV = function () {
-  return "" + this.x + ", " + this.y + ", " + this.w + ", " + this.h;
+  return "" + this.x + ", " + this.y + ", " + this.w + ", " + this.h + "\r";
 }
 
 var SpriteSet = Array;

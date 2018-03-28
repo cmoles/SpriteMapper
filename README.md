@@ -8,7 +8,7 @@ Download the repository and open the `index.html` file in your browser.
 
 ### Prerequisites
 
-This project has only been tested with Chrome. It should work with modern browsers, but I haven't tested them yet.
+This project has only been tested with Firefox and Chrome. It should work with modern browsers, but I haven't tested them yet.
 
 ## Controls
 
@@ -46,6 +46,6 @@ The controls are based on mouse events on the canvas and widgets on the right.
 
 ## Notes
 
-This was just a fun little project to practice Javascript. This is by no means close to complete, but I think it's usable in its current iteration.
+This is just a fun little project to practice Javascript. This is by no means close to complete, but I think it's usable in its current iteration.
 
 Enjoy!

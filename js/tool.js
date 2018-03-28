@@ -156,10 +156,12 @@ Tools.drawSprite = function (app) {
     const pre_d = div.zoom;
     var delta = 0;
 
-    if (event.wheelDelta) {
-      delta = event.wheelDelta / 60; // IE and Opera
-    } else if (event.detail) {
-      delta = -event.detail / 60; // W3C
+    if (ev.wheelDelta) {
+      delta = ev.wheelDelta / 60; // IE and Opera
+    } else if (ev.detail) {
+      delta = -ev.detail / 60; // W3C
+    } else if (ev.deltaY) {
+      delta = -ev.deltaY / 2; // Firefox
     }
     div.zoom = div.zoom + (delta * .1);
 

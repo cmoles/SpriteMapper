@@ -104,14 +104,14 @@ Widgets.loadWidget = function (app) {
     window.URL.revokeObjectURL(url);
   };
 
-  this.handleFileImgSelect = () => {
-    const file = event.target.files[0];
+  this.handleFileImgSelect = (ev) => {
+    const file = ev.target.files[0];
     const reader = new FileReader()
     if (file === undefined) {
       return;
     }
-    reader.onload = (ev) => {
-      const f = ev.target.result;
+    reader.onload = (e) => {
+      const f = e.target.result;
       div.offx = 0;
       div.offy = 0;
       div.zoom = 3;
@@ -123,14 +123,14 @@ Widgets.loadWidget = function (app) {
     fi.value = null;
   };
 
-  this.handleFileMapSelect = () => {
-    const file = event.target.files[0];
+  this.handleFileMapSelect = (ev) => {
+    const file = ev.target.files[0];
     const reader = new FileReader()
     if (file === undefined) {
       return;
     }
-    reader.onload = (ev) => {
-      const f = ev.target.result;
+    reader.onload = (e) => {
+      const f = e.target.result;
       const lines = f.split(/\r\n|\n/);
 
       if (lines.length === 0) {
